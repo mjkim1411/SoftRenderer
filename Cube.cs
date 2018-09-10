@@ -1,142 +1,134 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-   void Start()
+    [SerializeField]
+    private Vector3 _cubeSize;
+    [SerializeField]
+    private Vector2 _uvOffset;
+    [SerializeField]
+    private Vector3 _uvSize;
+
+    private void Start()
     {
-    MeshFilter mf = GetComponent<MeshFilter>();
-        Mesh m = new Mesh();
-        m.vertices = GetCubeVertices(new Vector3(5f, 5f, 5f));
-        m.triangles = GetQuadTriangles(0, 6);
-        m.uv = GetUVArray(new Vector2(0.0f, 0.75f), new Vector3(0.125f, 0.125f, 0.125f));
+        MeshFilter filter = GetComponent<MeshFilter>();
+        Mesh mesh = new Mesh();
+        Vector3[] vertices;
+        int[] indices;
+        Vector2[] uvs;
+        CreateCube(_cubeSize, _uvOffset, _uvSize, out vertices, out indices, out uvs);
+        m.vertices = vertices;
+        m.triangles = indices;
+        m.uv = uvs;
         m.RecalculateNormals();
-        mf.mesh = m;
+        filter.mesh = mesh;
     }
 
-
-    Vector3[] GetCubeVertices(Vector3 size)
+    private void CreateCube(Vector3 cubeSize, Vector2 uvOffset, Vector3 uvSize, out Vector3[] vertices, out int[] indices, out Vector2[] uvs)
     {
-        List<Vector3> vertices = new List<Vector3>();
-
-
-        // Top
-        vertices.Add(new Vector3(-size.x, size.y, -size.z));
-        vertices.Add(new Vector3(-size.x, size.y, size.z));
-        vertices.Add(new Vector3(size.x, size.y, size.z));
-        vertices.Add(new Vector3(size.x, size.y, -size.z));
-
-        // Bottom
-        vertices.Add(new Vector3(-size.x, -size.y, size.z));
-        vertices.Add(new Vector3(-size.x, -size.y, -size.z));
-        vertices.Add(new Vector3(size.x, -size.y, -size.z));
-        vertices.Add(new Vector3(size.x, -size.y, size.z));
-
-        // Front
-        vertices.Add(new Vector3(-size.x, -size.y, -size.z));
-        vertices.Add(new Vector3(-size.x, size.y, -size.z));
-        vertices.Add(new Vector3(size.x, size.y, -size.z));
-        vertices.Add(new Vector3(size.x, -size.y, -size.z));
-
-        // Right
-        vertices.Add(new Vector3(-size.x, -size.y, size.z));
-        vertices.Add(new Vector3(-size.x, size.y, size.z));
-        vertices.Add(new Vector3(-size.x, size.y, -size.z));
-        vertices.Add(new Vector3(-size.x, -size.y, -size.z));
-
-        // Left
-        vertices.Add(new Vector3(size.x, -size.y, -size.z));
-        vertices.Add(new Vector3(size.x, size.y, -size.z));
-        vertices.Add(new Vector3(size.x, size.y, size.z));
-        vertices.Add(new Vector3(size.x, -size.y, size.z));
-
-        // Back
-        vertices.Add(new Vector3(size.x, -size.y, size.z));
-        vertices.Add(new Vector3(size.x, size.y, size.z));
-        vertices.Add(new Vector3(-size.x, size.y, size.z));
-        vertices.Add(new Vector3(-size.x, -size.y, size.z));
-
-        return vertices.ToArray();
-    }
-
-    int[] GetQuadTriangles(int startIndex, int quadCount)
-    {
-        List<int> triangles = new List<int>();
-        int m = 0;
-
-        for (int i = 0; i < quadCount; i++)
+        vertices = new Vector3[]
         {
-            m = startIndex + i * 4;
+            // Front
+            new Vector3(-cubeSize.x, -cubeSize.y, 0f),
+            new Vector3(-cubeSize.x, cubeSize.y, 0f),
+            new Vector3(cubeSize.x, cubeSize.y, 0f),
+            new Vector3(cubeSize.x, -cubeSize.y, 0f),
 
-            triangles.Add(m);
-            triangles.Add(m + 1);
-            triangles.Add(m + 2);
-            triangles.Add(m);
-            triangles.Add(m + 2);
-            triangles.Add(m + 3);
-        }
+            // Top
+            new Vector3(-cubeSize.x, cubeSize.y, 0f),
+            new Vector3(-cubeSize.x, cubeSize.y, cubeSize.z),
+            new Vector3(cubeSize.x, cubeSize.y, cubeSize.z),
+            new Vector3(cubeSize.x, cubeSize.y, 0f),
 
-        return triangles.ToArray();
-    }
+            // Back
+            new Vector3(-cubeSize.x, -cubeSize.y, cubeSize.z),
+            new Vector3(-cubeSize.x, cubeSize.y, cubeSize.z),
+            new Vector3(cubeSize.x, cubeSize.y, cubeSize.z),
+            new Vector3(cubeSize.x, -cubeSize.y, cubeSize.z),
 
-    Vector2[] GetUVArray(Vector2 origin, Vector3 uvSize)
-    {
-        List<Vector2> uvs = new List<Vector2>();
+            // Left
+            new Vector3(-cubeSize.x, -cubeSize.y, cubeSize.z),
+            new Vector3(-cubeSize.x, cubeSize.y, cubeSize.z),
+            new Vector3(-cubeSize.x, cubeSize.y, 0f),
+            new Vector3(-cubeSize.x, -cubeSize.y, 0f),
 
-        Vector2[] top = new Vector2[]
-        {
-            new Vector2(origin.x + uvSize.z, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z, origin.y + uvSize.y + uvSize.z),
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y + uvSize.y + uvSize.z),
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y + uvSize.y)
+            // Right
+            new Vector3(cubeSize.x, -cubeSize.y, 0f),
+            new Vector3(cubeSize.x, cubeSize.y, 0f),
+            new Vector3(cubeSize.x, cubeSize.y, cubeSize.z),
+            new Vector3(cubeSize.x, -cubeSize.y, cubeSize.z),
+
+            // Bottom
+            new Vector3(-cubeSize.x, -cubeSize.y, cubeSize.z),
+            new Vector3(-cubeSize.x, -cubeSize.y, 0f),
+            new Vector3(cubeSize.x, -cubeSize.y, 0f),
+            new Vector3(cubeSize.x, -cubeSize.y, cubeSize.z)
         };
 
-        Vector2[] bottom = new Vector2[]
+        indices = new int[]
         {
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y + uvSize.y + uvSize.z),
-            new Vector2(origin.x + uvSize.z + uvSize.x * 2, origin.y + uvSize.y + uvSize.z),
-            new Vector2(origin.x + uvSize.z + uvSize.x * 2, origin.y + uvSize.y)
+            // Front
+            0, 1, 2,
+            0, 2, 3,
+
+            // Top
+            4, 5, 6,
+            4, 6, 7,
+
+            // Back
+            8, 10, 9,
+            8, 11, 10,
+
+            // Left
+            12, 13, 14,
+            12, 14, 15,
+
+            // Right
+            16, 17, 18,
+            16, 18, 19,
+
+            // Bottom
+            20, 21, 22,
+            20, 22, 23
         };
 
-        Vector2[] front = new Vector2[]
+        uvs = new Vector2[]
         {
-            new Vector2(origin.x + uvSize.z, origin.y),
-            new Vector2(origin.x + uvSize.z, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y)
-        };
+            // Front
+            new Vector2(uvOffset.x + uvSize.z, uvOffset.y),
+            new Vector2(uvOffset.x + uvSize.z, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.z + uvSize.x, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.z + uvSize.x, uvOffset.y),
 
-        Vector2[] right = new Vector2[]
-        {
-            new Vector2(origin.x, origin.y),
-            new Vector2(origin.x, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z, origin.y)
-        };
+            // Top
+            new Vector2(uvOffset.x + uvSize.z, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.z, uvOffset.y + uvSize.y * 2f),
+            new Vector2(uvOffset.x + uvSize.z + uvSize.x, uvOffset.y + uvSize.y * 2f),
+            new Vector2(uvOffset.x + uvSize.z + uvSize.x, uvOffset.y + uvSize.y),
 
-        Vector2[] left = new Vector2[]
-        {
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y),
-            new Vector2(origin.x + uvSize.z + uvSize.x, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z + uvSize.x * 2, origin.y + uvSize.y),
-            new Vector2(origin.x + uvSize.z + uvSize.x * 2, origin.y)
-        };
+            // Back
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z * 2f, uvOffset.y),
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z * 2f, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.x * 2f + uvSize.z * 2f, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.x * 2f + uvSize.z * 2f, uvOffset.y),
 
-        Vector2[] back = new Vector2[]
-        {
-            new Vector2(origin.x + uvSize.z + uvSize.x * 2, origin.y),
-            new Vector2(origin.x + uvSize.z + uvSize.x * 2, origin.y + uvSize.y),
-            new Vector2(origin.x + (uvSize.z + uvSize.x) * 2, origin.y + uvSize.y),
-            new Vector2(origin.x + (uvSize.z + uvSize.x) * 2, origin.y)
-        };
-        uvs.AddRange(top);
-        uvs.AddRange(bottom);
-        uvs.AddRange(front);
-        uvs.AddRange(right);
-        uvs.AddRange(left);
-        uvs.AddRange(back);
+            // Left
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z, uvOffset.y),
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z * 2f, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z * 2f, uvOffset.y),
 
-        return uvs.ToArray();
+            // Right
+            new Vector2(uvOffset.x, uvOffset.y),
+            new Vector2(uvOffset.x, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.z, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.z, uvOffset.y),
+
+            // Bottom
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z, uvOffset.y + uvSize.y),
+            new Vector2(uvOffset.x + uvSize.x + uvSize.z, uvOffset.y + uvSize.y + uvSize.z),
+            new Vector2(uvOffset.x + uvSize.x * 2f + uvSize.z, uvOffset.y + uvSize.y + uvSize.z),
+            new Vector2(uvOffset.x + uvSize.x * 2f + uvSize.z, uvOffset.y + uvSize.y)
+        };
     }
 }

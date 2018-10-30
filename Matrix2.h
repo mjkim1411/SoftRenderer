@@ -38,5 +38,6 @@ public:
 		_22 = sinf(radian);
 	}
 	//operator Ãß°¡
+	Matrix2 operator *(const Matrix2& Mat) const;
 
 };

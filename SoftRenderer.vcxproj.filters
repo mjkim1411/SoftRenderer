@@ -77,6 +77,9 @@
     <ClCompile Include="Vector2.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Matrix2.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SoftRenderer.rc">

@@ -43,23 +43,48 @@ void UpdateFrame(void)
 	Vector2 center(0.0f, 0.0f);
 	float radius = 100.0f;
 	int nradius = (int)radius;
-
+	/*
 	Matrix2 scaleMat;
 	scaleMat.SetScale(2.0f, 0.5f);
+	Matrix2 roMat;
+	roMat.SetRotation(30.0f);
 
 	for (int i = -nradius; i <= nradius; i++)
 	{
-		for (int j = -nradius; j <= nradius; j++)
+		for (int j = 0;/*-nradius; j <= nradius; j++)
 		{
 			IntPoint pt(i, j);
 			Vector2 ptVec = pt.ToVector2();
 			if (Vector2::DistSquared(center, ptVec) <= radius * radius)
 			{
 				IntPoint scaledPt(ptVec * scaleMat);
+				IntPoint rotatedPt(ptVec *roMat);
+				
 				PutPixel(scaledPt);
 			}
 		}
 	}
+	*/
+	static float degree = 0;
+	degree += 0.1f;
+	degree = fmodf(degree, 360.0f);
+
+
+	Matrix2 roMat;
+	roMat.SetRotation(degree);
+
+
+	for (int i = -nradius; i <= nradius; i++)
+	{
+		for (int j = -nradius; j <= nradius; j++)
+		{
+
+			PutPixel(Vector2(i, j)*roMat);
+		}
+	}
+
+
+
 
 
 	// Buffer Swap 

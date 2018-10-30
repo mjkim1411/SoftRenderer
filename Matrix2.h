@@ -31,6 +31,12 @@ public:
 
 	void SetRotation(float degree)
 	{
-
+		float radian = Deg2Rad(degree);
+		_11 = cosf(radian);
+		_12 = -sinf(radian);
+		_21 = cosf(radian);
+		_22 = sinf(radian);
 	}
+	//operator Ãß°¡
+
 };

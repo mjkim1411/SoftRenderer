@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GDIHelper.cpp" />
+    <ClCompile Include="Matrix2.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SoftRenderer.cpp" />
     <ClCompile Include="stdafx.cpp">

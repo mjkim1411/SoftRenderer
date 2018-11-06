@@ -33,11 +33,11 @@ void PutPixel(int x, int y)
 void UpdateFrame(void)
 {
 	// Buffer Clear
-	SetColor(32, 128, 255);
+	SetColor(0, 0, 0);
 	Clear();
 
 	// Draw
-	SetColor(255, 0, 0);
+	SetColor(156, 12, 156);
 
 	// Draw a filled circle with radius 100
 	Vector3 center(0.0f, 0.0f);

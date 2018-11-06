@@ -34,10 +34,16 @@ public:
 		float radian = Deg2Rad(degree);
 		_11 = cosf(radian);
 		_12 = -sinf(radian);
-		_21 = cosf(radian);
-		_22 = sinf(radian);
+		_21 = sinf(radian);
+		_22 = cosf(radian);
 	}
-	//operator Ãß°¡
-	Matrix2 operator *(const Matrix2& Mat) const;
 
+	void Transpose()
+	{
+		float temp = _12;
+		_12 = _21;
+		_21 = temp;
+	}
+
+	Matrix2 operator *(const Matrix2& Mat) const;
 };
